@@ -1,5 +1,6 @@
 package com.alas.gasenergiaacqua.entity;
 
+import com.alas.gasenergiaacqua.util.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,8 +34,8 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false)
@@ -46,8 +47,4 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UtilityMeter> utilityMeters;
-
-    public enum UserType {
-        NORMAL, ADMIN
-    }
 }
