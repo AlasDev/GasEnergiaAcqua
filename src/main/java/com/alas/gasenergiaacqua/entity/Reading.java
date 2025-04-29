@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "readings", uniqueConstraints = {
@@ -20,11 +22,12 @@ import java.time.LocalDateTime;
 public class Reading {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "uuid")
+    private UUID uuid;
 
     @ManyToOne
-    @JoinColumn(name = "meter_id", nullable = false)
+    @JoinColumn(name = "meter_uuid", nullable = false)
     private UtilityMeter meter;
 
     @Column(name = "value_recorded", nullable = false, precision = 12, scale = 3)
@@ -33,9 +36,10 @@ public class Reading {
     @Column(name = "reading_timestamp", nullable = false)
     private LocalDateTime readingTimestamp;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
 
+    @Immutable
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 }

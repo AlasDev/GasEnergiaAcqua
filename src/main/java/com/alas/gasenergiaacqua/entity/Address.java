@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "addresses")
@@ -18,23 +20,25 @@ import java.util.List;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "uuid")
+    private UUID uuid;
 
     @Column(name = "street_address", nullable = false)
     private String streetAddress;
 
-    @Column(nullable = false)
+    @Column(name = "city", nullable = false)
     private String city;
 
     @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
-    @Column(nullable = false)
+    @Column(name = "country", nullable = false)
     private String country;
 
+    @Immutable
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "address")
     private List<UtilityMeter> utilityMeters;

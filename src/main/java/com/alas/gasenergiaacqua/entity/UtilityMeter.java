@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "utility_meters")
@@ -19,15 +21,16 @@ import java.util.List;
 public class UtilityMeter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "uuid")
+    private UUID uuid;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_uuid", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "address_uuid", nullable = false)
     private Address address;
 
     @Enumerated(EnumType.STRING)
@@ -36,7 +39,7 @@ public class UtilityMeter {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "input_method", nullable = false)
-    private InputMethod inputMethod = InputMethod.MANUAL;
+    private InputMethod inputMethod;
 
     @Column(name = "service_point_identifier", unique = true)
     private String servicePointIdentifier;
@@ -51,13 +54,15 @@ public class UtilityMeter {
     private LocalDate installationDate;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
+    private Boolean isActive;
 
+    @Immutable
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
+    @Immutable
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "meter", cascade = CascadeType.ALL)
     private List<Reading> readings;
