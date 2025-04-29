@@ -12,7 +12,7 @@ CREATE TABLE users (
                        name VARCHAR(100) NOT NULL,
                        surname VARCHAR(100) NOT NULL,
                        email VARCHAR(255) NOT NULL UNIQUE,
-                       password_hash VARCHAR(60) NOT NULL, -- Per hash bcrypt
+                       password VARCHAR(60) NOT NULL,
                        user_type user_type_enum NOT NULL DEFAULT 'NORMAL',
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
