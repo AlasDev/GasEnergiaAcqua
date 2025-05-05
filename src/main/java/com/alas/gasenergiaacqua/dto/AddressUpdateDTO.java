@@ -5,22 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
+/**
+ * DTO with the data of Address that can be modified
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AddressDTO {
+public class AddressUpdateDTO {
     private UUID id;
     private String streetAddress;
     private String city;
     private String postalCode;
     private String country;
-
-    private LocalDateTime createdAt;
-
-    private List<UUID> utilityMetersIds;
 }

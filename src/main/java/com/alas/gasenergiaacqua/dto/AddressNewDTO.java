@@ -5,22 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
+/**
+ * DTO expected to be received when creating a new address
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AddressDTO {
-    private UUID id;
+public class AddressNewDTO {
     private String streetAddress;
     private String city;
     private String postalCode;
     private String country;
-
-    private LocalDateTime createdAt;
-
-    private List<UUID> utilityMetersIds;
 }
