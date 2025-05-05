@@ -14,13 +14,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class UserDTO {
-    private UUID uuid;
+    private UUID id;
     private String name;
     private String surname;
     private String email;
-    private String passwordHash;
-    private String userType;
+    private String password;
 
+    private Integer userTypeId;
     private LocalDateTime createdAt;
-    private List<UUID> utilityMeters;
+    private List<UUID> utilityMetersIds;
 }

@@ -17,11 +17,11 @@ import java.util.UUID;
 @Builder
 public class UserSummaryDTO {
 
-    private UUID uuid;
+    private UUID id;
 
-    private String nome;
+    private String name;
 
-    private String cognome;
+    private String surname;
 
     @Email
     private String email;

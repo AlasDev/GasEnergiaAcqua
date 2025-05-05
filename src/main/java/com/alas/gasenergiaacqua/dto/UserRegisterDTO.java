@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO expected to be found in register's body
+ * DTO expected to be received when creating a new user
  */
 @Data
 @NoArgsConstructor
