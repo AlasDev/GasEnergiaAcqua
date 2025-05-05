@@ -13,12 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReadingDTO {
-    private UUID id;
+public class ReadingNewDTO {
     private UUID utilityMeterId;
     private BigDecimal valueRecorded;
     private LocalDateTime readingTimestamp;
     private String notes;
-
-    private LocalDateTime createdAt;
 }
