@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Immutable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,24 +21,24 @@ public class UtilityMeter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "uuid")
-    private UUID uuid;
+    @Column(name = "id")
+    private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_uuid", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "address_uuid", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
     private Address address;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "resource_type", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resource_type_id", nullable = false)
     private ResourceType resourceType;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "input_method", nullable = false)
-    private InputMethod inputMethod;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "utility_meter_type_id", nullable = false)
+    private UtilityMeterType utilityMeterType;
 
     @Column(name = "service_point_identifier", unique = true)
     private String servicePointIdentifier;
@@ -53,25 +52,15 @@ public class UtilityMeter {
     @Column(name = "installation_date")
     private LocalDate installationDate;
 
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    @Column(name = "is_active")
+    private Boolean isActive = true;
 
-    @Immutable
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
-    @Immutable
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "meter", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "utilityMeter", cascade = CascadeType.ALL)
     private List<Reading> readings;
-
-    public enum ResourceType {
-        WATER, GAS, ELECTRICITY
-    }
-
-    public enum InputMethod {
-        MANUAL, AUTOMATIC
-    }
 }

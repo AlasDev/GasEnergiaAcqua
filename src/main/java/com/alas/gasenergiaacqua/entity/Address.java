@@ -21,8 +21,8 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "uuid")
-    private UUID uuid;
+    @Column(name = "id")
+    private UUID id;
 
     @Column(name = "street_address", nullable = false)
     private String streetAddress;
@@ -36,8 +36,7 @@ public class Address {
     @Column(name = "country", nullable = false)
     private String country;
 
-    @Immutable
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "address")

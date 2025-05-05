@@ -12,9 +12,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "readings", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"meter_id", "reading_timestamp"})
-})
+@Table(name = "readings")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,12 +21,12 @@ public class Reading {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "uuid")
-    private UUID uuid;
+    @Column(name = "id")
+    private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "meter_uuid", nullable = false)
-    private UtilityMeter meter;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meter_id", nullable = false)
+    private UtilityMeter utilityMeter;
 
     @Column(name = "value_recorded", nullable = false, precision = 12, scale = 3)
     private BigDecimal valueRecorded;
@@ -36,10 +34,9 @@ public class Reading {
     @Column(name = "reading_timestamp", nullable = false)
     private LocalDateTime readingTimestamp;
 
-    @Column(name = "notes", columnDefinition = "TEXT")
+    @Column(name = "notes")
     private String notes;
 
-    @Immutable
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 }
