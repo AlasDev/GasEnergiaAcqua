@@ -18,7 +18,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Objects;
-import java.util.UUID;
 
 @Component
 @Order(1)
@@ -46,6 +45,7 @@ public class AccessFilter extends OncePerRequestFilter {
                 .timestamp(Instant.now())
                 .message(message)
                 .build();
+        System.err.println("AccessFilterError: " + ex.getMessage());
         response.setStatus(status.value());
         response.getWriter().write(objectMapper.writeValueAsString(responseMessage));
         response.getWriter().flush();
@@ -115,15 +115,15 @@ public class AccessFilter extends OncePerRequestFilter {
         }
 
         final String token = request.getHeader("Authorization");
-        final String userType = jwtTokenProvider.extractUserTypeFromClaims(token);
-        final UUID myId = jwtTokenProvider.extractIdFromClaims(token);
+        final Integer userType = jwtTokenProvider.extractUserTypeFromClaims(token);
+//        final UUID myId = jwtTokenProvider.extractIdFromClaims(token);
 
         switch (userType) {
-            case "ADMIN":
+            case 2: //admin
                 System.out.println("ADMIN called method: " + method + " url: " + url);
                 filterChain.doFilter(request, response);
                 break;
-            case "NORMAL": //default user
+            case 1: //normal user
                 System.out.println("NORMAL");
                 switch (method) {
                     case "GET":
@@ -143,7 +143,6 @@ public class AccessFilter extends OncePerRequestFilter {
                         filterChain.doFilter(request, response);
                         break;
                     default:
-                        System.out.println("Method: " + method + " is not implemented");
                         handleException(
                                 new AuthenticationException("Requested action cannot be performed with this userType: " + userType),
                                 "Requested action cannot be performed with this userType: " + userType,

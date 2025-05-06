@@ -1,9 +1,7 @@
 package com.alas.gasenergiaacqua.controller;
 
 import com.alas.gasenergiaacqua.dto.*;
-import com.alas.gasenergiaacqua.filter.ReadingFilter;
 import com.alas.gasenergiaacqua.filter.UtilityMeterFilter;
-import com.alas.gasenergiaacqua.service.ReadingService;
 import com.alas.gasenergiaacqua.service.UtilityMeterService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
