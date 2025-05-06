@@ -4,6 +4,7 @@ import com.alas.gasenergiaacqua.dto.*;
 import com.alas.gasenergiaacqua.filter.UserFilter;
 import com.alas.gasenergiaacqua.service.UserService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -34,12 +35,12 @@ public class UserController {
     }
 
     @PostMapping("/post")
-    public ResponseMessage create(@RequestBody UserRegisterDTO DTO) {
+    public ResponseMessage create(@Validated @RequestBody UserRegisterDTO DTO) {
         return userService.postNew(DTO);
     }
 
     @PutMapping("/update")
-    public UserDTO update(@RequestBody UserUpdateDTO DTO) {
+    public UserDTO update(@Validated @RequestBody UserUpdateDTO DTO) {
         return userService.updateUser(DTO);
     }
 }

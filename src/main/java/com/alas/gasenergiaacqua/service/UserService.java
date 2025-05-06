@@ -2,14 +2,17 @@ package com.alas.gasenergiaacqua.service;
 
 import com.alas.gasenergiaacqua.dto.*;
 import com.alas.gasenergiaacqua.entity.User;
+import com.alas.gasenergiaacqua.entity.UserType;
+import com.alas.gasenergiaacqua.exception.ElementAlreadyPresentException;
 import com.alas.gasenergiaacqua.filter.UserFilter;
 import com.alas.gasenergiaacqua.mapper.UserMapper;
 import com.alas.gasenergiaacqua.repository.UserRepository;
+import com.alas.gasenergiaacqua.util.PasswordUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -17,41 +20,45 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordUtil passwordUtil;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordUtil passwordUtil) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordUtil = passwordUtil;
     }
 
     /**
-     * @param uuid the UUID of the User you want to get
-     * @return a User if found
-     * @throws NoSuchElementException if not found
+     * @param id uuid of the User you want to get
+     * @return a DTO if found
      */
-    public UserDTO getByUuid(UUID uuid) throws NoSuchElementException {
-        return userMapper.mapToDto(userRepository.findByUuid(uuid).get());
+    public UserDTO getById(UUID id){
+        return userMapper.mapToDto(userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Cannot find!\nNo user was found with id: " + id)));
     }
 
     /**
      * @param params filters applied to the search
      * @param pageable pageable
-     * @return a pageDTO containing UserDTO
+     * @return a pageDTO containing a list of DTO
      */
-    public PageDTO<UserSummaryDTO> searchBySpecification(UserFilter params, Pageable pageable) {
+    public PageDTO<UserSummaryDTO> searchBySpecification(Pageable pageable, UserFilter params) {
         return userMapper.mapToPageDTO(userRepository.findAll(params.toSpecification(), pageable));
     }
 
     /**
      * Deletes a User with given uuid
-     * @param uuid uuid of the User which is going to be deleted
+     * @param id uuid of the User which is going to be deleted
      * @return a ResponseMessage
      */
-    public ResponseMessage deleteByUuid(UUID uuid) {
-        userRepository.findByUuid(uuid).ifPresent(userRepository::delete);
+    public ResponseMessage deleteById(UUID id) {
+        userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Cannot delete!\nNo user was found with id: " + id));
+        userRepository.deleteById(id);
 
         return ResponseMessage.builder()
+                .timestamp(Instant.now())
                 .message("User deleted successfully")
-                .status(HttpStatus.OK)
                 .build();
     }
 
@@ -60,19 +67,25 @@ public class UserService {
      * @return a ResponseMessage
      */
     public ResponseMessage postNew(UserRegisterDTO userDTO) {
-        String passwordHash = DigestUtils.sha256Hex(userDTO.getPassword());
+//        String passwordHash = DigestUtils.sha256Hex(userDTO.getPassword());
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new ElementAlreadyPresentException("Cannot register a new user! Email " + userDTO.getEmail() + " is already in use");
+        }
+
+        String passwordHash = passwordUtil.hash(userDTO.getPassword());
 
         User newUser = User.builder()
                 .name(userDTO.getName())
                 .surname(userDTO.getSurname())
                 .email(userDTO.getEmail())
                 .password(passwordHash)
+                .userType(UserType.builder().id(1).build()) //default for all new users
                 .build();
         userRepository.save(newUser);
 
         return ResponseMessage.builder()
+                .timestamp(Instant.now())
                 .message("New user registered successfully")
-                .status(HttpStatus.OK)
                 .build();
     }
 
@@ -81,7 +94,8 @@ public class UserService {
      * @return the updated User
      */
     public UserDTO updateUser(UserUpdateDTO userDTO) {
-        User user = userRepository.findByUuid(userDTO.getUuid()).get();
+        User user = userRepository.findById(userDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("Cannot update!\nNo user was found"));
 
         if (userDTO.getName() != null && !userDTO.getName().trim().isEmpty()) {
             user.setName(userDTO.getName());
