@@ -1,26 +1,18 @@
 package com.alas.gasenergiaacqua.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.experimental.SuperBuilder;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class ResponseMessage {
-    Timestamp timestamp;
-    HttpStatus status;
+    Instant timestamp;
     String message;
-
-    public ResponseMessage(String message, HttpStatus status) {
-        this.timestamp = new Timestamp(System.currentTimeMillis());
-        this.status = status;
-        this.message = message;
-    }
 }
 
