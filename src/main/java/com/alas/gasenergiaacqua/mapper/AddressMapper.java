@@ -18,35 +18,35 @@ import java.util.UUID;
         builder = @Builder(disableBuilder = true), uses = {UtilityMeterMapper.class})
 public interface AddressMapper {
 
-    @Mapping(target = "utilityMeters", source = "utilityMeters", qualifiedByName = "toUtilityMetersUuids")
-    AddressDTO toDto(Address address);
+    @Mapping(target = "utilityMetersIds", source = "utilityMeters", qualifiedByName = "toUtilityMetersIds")
+    AddressDTO mapToDto(Address entity);
 
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "utilityMeters", source = "utilityMeters", qualifiedByName = "toUtilityMetersEntities")
-    Address toEntity(AddressDTO addressDto);
+    @Mapping(target = "utilityMeters", source = "utilityMetersIds", qualifiedByName = "toUtilityMetersEntities")
+    Address mapToEntity(AddressDTO dto);
 
-    List<AddressDTO> toDtos(List<Address> addresses);
+    List<AddressDTO> mapToDtos(List<Address> entities);
 
-    List<Address> toEntities(List<AddressDTO> addressDtoList);
+    List<Address> mapToEntities(List<AddressDTO> dtos);
 
     PageDTO<AddressDTO> mapToPageDTO(Page<Address> page);
 
     @Named("toUtilityMetersEntities")
-    default List<UtilityMeter> toUtilityMetersEntities(List<UUID> uuids) {
+    default List<UtilityMeter> toUtilityMetersEntities(List<UUID> ids) {
         List<UtilityMeter> entities = new ArrayList<>();
-        for (UUID uuid : uuids) {
+        for (UUID id : ids) {
             UtilityMeter entity = UtilityMeter.builder()
-                    .uuid(uuid)
+                    .id(id)
                     .build();
             entities.add(entity);
         }
         return entities;
     }
 
-    @Named("toUtilityMetersUuids")
-    default List<UUID> toUtilityMetersUuids(List<UtilityMeter> entities) {
+    @Named("toUtilityMetersIds")
+    default List<UUID> toUtilityMetersIds(List<UtilityMeter> entities) {
         return entities.stream()
-                .map(UtilityMeter::getUuid)
+                .map(UtilityMeter::getId)
                 .toList();
     }
 }

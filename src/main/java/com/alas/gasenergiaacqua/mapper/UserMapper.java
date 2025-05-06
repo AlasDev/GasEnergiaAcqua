@@ -2,6 +2,7 @@ package com.alas.gasenergiaacqua.mapper;
 
 import com.alas.gasenergiaacqua.dto.PageDTO;
 import com.alas.gasenergiaacqua.dto.UserDTO;
+import com.alas.gasenergiaacqua.dto.UserSummaryDTO;
 import com.alas.gasenergiaacqua.entity.User;
 import com.alas.gasenergiaacqua.entity.UtilityMeter;
 import org.mapstruct.Builder;
@@ -19,44 +20,38 @@ import java.util.UUID;
         builder = @Builder(disableBuilder = true))
 public interface UserMapper {
 
-    @Mapping(target = "utilityMeters", source = "utilityMeters", qualifiedByName = "toUtilityMetersUuids")
-    UserDTO toDto(User user);
+    @Mapping(target = "utilityMetersIds", source = "utilityMeters", qualifiedByName = "toUtilityMetersIds")
+    @Mapping(target = "userTypeId", source = "userType.id")
+    UserDTO mapToDto(User entity);
 
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "utilityMeters", source = "utilityMeters", qualifiedByName = "toUtilityMetersEntities")
-    User toEntity(UserDTO userDto);
+    @Mapping(target = "utilityMeters", source = "utilityMetersIds", qualifiedByName = "toUtilityMetersEntities")
+    @Mapping(target = "userType.id", source = "userTypeId")
+    User mapToEntity(UserDTO dto);
 
-    List<UserDTO> toDtos(List<User> users);
+    UserSummaryDTO mapToUserSummaryDto(User entity);
 
-    List<User> toEntities(List<UserDTO> userDtos);
+    List<UserSummaryDTO> mapToUserSummaryDtos(List<User> entities);
 
-    PageDTO<UserDTO> mapToPageDTO(Page<User> page);
+    List<UserDTO> mapToDtos(List<User> entities);
 
-    @Named("toUtilityMetersUuid")
-    default UUID toUtilityMetersUuid(UtilityMeter entity) {
-        return entity.getUuid();
-    }
+    List<User> mapToEntities(List<UserDTO> dtos);
 
-    @Named("toUtilityMetersEntity")
-    default UtilityMeter toUtilityMetersEntity(UUID uuid) {
-        return UtilityMeter.builder()
-                .uuid(uuid)
-                .build();
-    }
+    PageDTO<UserSummaryDTO> mapToPageDTO(Page<User> page);
 
-    @Named("toUtilityMetersUuids")
-    default List<UUID> toUtilityMetersUuids(List<UtilityMeter> entities) {
+    @Named("toUtilityMetersIds")
+    default List<UUID> toUtilityMetersIds(List<UtilityMeter> entities) {
         return entities.stream()
-                .map(UtilityMeter::getUuid)
+                .map(UtilityMeter::getId)
                 .toList();
     }
 
     @Named("toUtilityMetersEntities")
-    default List<UtilityMeter> toUtilityMetersEntities(List<UUID> uuids) {
+    default List<UtilityMeter> toUtilityMetersEntities(List<UUID> ids) {
         List<UtilityMeter> entities = new ArrayList<>();
-        for (UUID uuid : uuids) {
+        for (UUID id : ids) {
             UtilityMeter entity = UtilityMeter.builder()
-                    .uuid(uuid)
+                    .id(id)
                     .build();
             entities.add(entity);
         }

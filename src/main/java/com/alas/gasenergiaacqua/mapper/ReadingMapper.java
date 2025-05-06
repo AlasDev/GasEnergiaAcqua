@@ -17,28 +17,16 @@ import java.util.UUID;
         builder = @Builder(disableBuilder = true))
 public interface ReadingMapper {
 
-    @Mapping(target = "meter", source = "meter", qualifiedByName = "toMeterUuid")
-    ReadingDTO toDto(Reading reading);
+    @Mapping(target = "utilityMeterId", source = "utilityMeter.id")
+    ReadingDTO mapToDto(Reading entity);
 
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "meter", source = "meter", qualifiedByName = "toMeterEntity")
-    Reading toEntity(ReadingDTO readingDto);
+    @Mapping(target = "utilityMeter.id", source = "utilityMeterId")
+    Reading mapToEntity(ReadingDTO dto);
 
-    List<ReadingDTO> toDtos(List<Reading> readings);
+    List<ReadingDTO> mapToDtos(List<Reading> entities);
 
-    List<Reading> toEntities(List<ReadingDTO> readingDtos);
+    List<Reading> mapToEntities(List<ReadingDTO> dtos);
 
     PageDTO<ReadingDTO> mapToPageDTO(Page<Reading> page);
-
-    @Named("toMeterEntity")
-    default UtilityMeter toMeterEntity(UUID uuid) {
-        return UtilityMeter.builder()
-                .uuid(uuid)
-                .build();
-    }
-
-    @Named("toMeterUuid")
-    default UUID toMeterUuid(UtilityMeter entity) {
-        return entity.getUuid();
-    }
 }
