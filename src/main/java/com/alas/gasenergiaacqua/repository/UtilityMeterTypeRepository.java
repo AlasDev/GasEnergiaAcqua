@@ -1,12 +1,10 @@
 package com.alas.gasenergiaacqua.repository;
 
-import com.alas.gasenergiaacqua.entity.User;
+import com.alas.gasenergiaacqua.entity.UtilityMeterType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
+public interface UtilityMeterTypeRepository extends JpaRepository<UtilityMeterType, Integer>, JpaSpecificationExecutor<UtilityMeterType> {
 }
