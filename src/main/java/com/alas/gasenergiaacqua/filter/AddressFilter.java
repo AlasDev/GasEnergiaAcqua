@@ -1,7 +1,6 @@
 package com.alas.gasenergiaacqua.filter;
 
-import com.alas.gasenergiaacqua.entity.User;
-import com.alas.gasenergiaacqua.entity.UserType;
+import com.alas.gasenergiaacqua.entity.Address;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -12,28 +11,28 @@ import java.util.UUID;
  * Filter params to only return the values that satisfy the criteria. If a filter param is empty it will not be considered
  */
 @Data
-public class UserFilter {
+public class AddressFilter {
     UUID id;
-    String name;
-    String surname;
-    String email;
-    UserType userType;
+    String streetAddress;
+    String city;
+    String postalCode;
+    String country;
     LocalDateTime fromCreatedAt;
     LocalDateTime toCreatedAt;
 
-    public Specification<User> toSpecification() {
-        return Specification.<User>where(null)
+    public Specification<Address> toSpecification() {
+        return Specification.<Address>where(null)
                 .and(equalUuidSpecification(id))
-                .and(likeNameSpecification(name))
-                .and(likeSurnameSpecification(surname))
-                .and(likeEmailSpecification(email))
-                .and(equalUserTypeSpecification(userType))
+                .and(likeStreetAddressSpecification(streetAddress))
+                .and(likeCitySpecification(city))
+                .and(likePostalCodeSpecification(postalCode))
+                .and(likeCountrySpecification(country))
                 .and(greaterThanOrEqualToCreatedAtSpecification(fromCreatedAt))
                 .and(lessThanCreatedAtSpecification(toCreatedAt));
     }
 
     //uuid
-    private Specification<User> equalUuidSpecification(UUID id) {
+    private Specification<Address> equalUuidSpecification(UUID id) {
         return (root, query, criteriaBuilder) -> {
             if (id == null) {
                 return null;
@@ -42,48 +41,48 @@ public class UserFilter {
         };
     }
 
-    //name
-    private Specification<User> likeNameSpecification(String name) {
+    //streetAddress
+    private Specification<Address> likeStreetAddressSpecification(String streetAddress) {
         return (root, query, criteriaBuilder) -> {
-            if (name == null || name.isBlank()) {
+            if (streetAddress == null || streetAddress.isBlank()) {
                 return null;
             }
-            return criteriaBuilder.like(root.get("name"), "%" + name + "%");
+            return criteriaBuilder.like(root.get("streetAddress"), "%" + streetAddress + "%");
         };
     }
 
-    //surname
-    private Specification<User> likeSurnameSpecification(String surname) {
+    //city
+    private Specification<Address> likeCitySpecification(String city) {
         return (root, query, criteriaBuilder) -> {
-            if (surname == null || surname.isBlank()) {
+            if (city == null || city.isBlank()) {
                 return null;
             }
-            return criteriaBuilder.like(root.get("surname"), "%" + surname + "%");
+            return criteriaBuilder.like(root.get("city"), "%" + city + "%");
         };
     }
 
-    //email
-    private Specification<User> likeEmailSpecification(String email) {
+    //streetAddress
+    private Specification<Address> likePostalCodeSpecification(String postalCode) {
         return (root, query, criteriaBuilder) -> {
-            if (email == null || email.isBlank()) {
+            if (postalCode == null || postalCode.isBlank()) {
                 return null;
             }
-            return criteriaBuilder.like(root.get("email"), "%" + email + "%");
+            return criteriaBuilder.like(root.get("postalCode"), "%" + postalCode + "%");
         };
     }
 
-    //userType
-    private Specification<User> equalUserTypeSpecification(UserType userType) {
+    //streetAddress
+    private Specification<Address> likeCountrySpecification(String country) {
         return (root, query, criteriaBuilder) -> {
-            if (userType == null) {
+            if (country == null || country.isBlank()) {
                 return null;
             }
-            return criteriaBuilder.equal(root.get("userType"), userType);
+            return criteriaBuilder.like(root.get("country"), "%" + country + "%");
         };
     }
 
     //from createdAt
-    private Specification<User> greaterThanOrEqualToCreatedAtSpecification(LocalDateTime localDateTime) {
+    private Specification<Address> greaterThanOrEqualToCreatedAtSpecification(LocalDateTime localDateTime) {
         return (root, query, criteriaBuilder) -> {
             if (localDateTime == null) {
                 return null;
@@ -93,7 +92,7 @@ public class UserFilter {
     }
 
     //to createdAt
-    private Specification<User> lessThanCreatedAtSpecification(LocalDateTime localDateTime) {
+    private Specification<Address> lessThanCreatedAtSpecification(LocalDateTime localDateTime) {
         return (root, query, criteriaBuilder) -> {
             if (localDateTime == null) {
                 return null;
