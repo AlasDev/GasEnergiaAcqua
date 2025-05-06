@@ -4,6 +4,7 @@ import com.alas.gasenergiaacqua.dto.*;
 import com.alas.gasenergiaacqua.filter.ReadingFilter;
 import com.alas.gasenergiaacqua.service.ReadingService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -34,12 +35,12 @@ public class ReadingController {
     }
 
     @PostMapping("/post")
-    public ResponseMessage create(@RequestBody ReadingNewDTO DTO) {
+    public ResponseMessage create(@Validated @RequestBody ReadingNewDTO DTO) {
         return readingService.postNew(DTO);
     }
 
     @PutMapping("/update")
-    public ReadingDTO update(@RequestBody ReadingUpdateDTO DTO) {
+    public ReadingDTO update(@Validated @RequestBody ReadingUpdateDTO DTO) {
         return readingService.updateReading(DTO);
     }
 }
