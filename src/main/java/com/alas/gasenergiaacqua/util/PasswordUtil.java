@@ -16,9 +16,9 @@ public class PasswordUtil {
     /**
      * @param password the raw password
      * @param hashed the hashed password you want to campare the raw password with
-     * @return true if they match, false otherwise
+     * @return 'true' if they match, 'false' otherwise
      */
-    public boolean verify(String password, String hashed) {
+    public boolean match(String password, String hashed) {
         BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), hashed);
         return result.verified;
     }
