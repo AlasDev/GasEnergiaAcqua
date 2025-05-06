@@ -4,6 +4,7 @@ import com.alas.gasenergiaacqua.dto.*;
 import com.alas.gasenergiaacqua.filter.AddressFilter;
 import com.alas.gasenergiaacqua.service.AddressService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -34,12 +35,12 @@ public class AddressController {
     }
 
     @PostMapping("/post")
-    public ResponseMessage create(@RequestBody AddressNewDTO DTO) {
+    public ResponseMessage create(@Validated @RequestBody AddressNewDTO DTO) {
         return addressService.postNew(DTO);
     }
 
     @PutMapping("/update")
-    public AddressDTO update(@RequestBody AddressUpdateDTO DTO) {
+    public AddressDTO update(@Validated @RequestBody AddressUpdateDTO DTO) {
         return addressService.updateAddress(DTO);
     }
 }
