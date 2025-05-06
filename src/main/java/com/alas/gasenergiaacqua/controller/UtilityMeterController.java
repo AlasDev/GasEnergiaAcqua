@@ -6,6 +6,7 @@ import com.alas.gasenergiaacqua.filter.UtilityMeterFilter;
 import com.alas.gasenergiaacqua.service.ReadingService;
 import com.alas.gasenergiaacqua.service.UtilityMeterService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -36,12 +37,12 @@ public class UtilityMeterController {
     }
 
     @PostMapping("/post")
-    public ResponseMessage create(@RequestBody UtilityMeterNewDTO DTO) {
+    public ResponseMessage create(@Validated @RequestBody UtilityMeterNewDTO DTO) {
         return utilityMeterService.postNew(DTO);
     }
 
     @PutMapping("/update")
-    public UtilityMeterDTO update(@RequestBody UtilityMeterUpdateDTO DTO) {
+    public UtilityMeterDTO update(@Validated @RequestBody UtilityMeterUpdateDTO DTO) {
         return utilityMeterService.updateUtilityMeter(DTO);
     }
 }
