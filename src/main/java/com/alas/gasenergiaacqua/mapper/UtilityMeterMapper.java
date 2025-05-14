@@ -37,6 +37,7 @@ public interface UtilityMeterMapper {
     @Mapping(target = "utilityMeterType.id", source = "utilityMeterTypeId")
     UtilityMeter mapToEntity(UtilityMeterDTO dto);
 
+    @Mapping(target = "resourceTypeId", source = "resourceType.id")
     UtilityMeterSummaryDTO mapToUtilityMeterSummaryDto(UtilityMeter entity);
 
     List<UtilityMeterSummaryDTO> mapToUtilityMeterSummaryDtos(List<UtilityMeter> entities);
