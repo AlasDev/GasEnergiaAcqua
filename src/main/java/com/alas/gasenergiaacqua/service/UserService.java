@@ -1,5 +1,6 @@
 package com.alas.gasenergiaacqua.service;
 
+import com.alas.gasenergiaacqua.auth.JwtTokenProvider;
 import com.alas.gasenergiaacqua.dto.*;
 import com.alas.gasenergiaacqua.entity.User;
 import com.alas.gasenergiaacqua.entity.UserType;
@@ -11,6 +12,7 @@ import com.alas.gasenergiaacqua.util.PasswordUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.Instant;
 import java.util.NoSuchElementException;
@@ -21,11 +23,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordUtil passwordUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordUtil passwordUtil) {
+    public UserService(UserRepository userRepository,
+                       UserMapper userMapper,
+                       PasswordUtil passwordUtil,
+                       JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordUtil = passwordUtil;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     /**
@@ -112,5 +119,12 @@ public class UserService {
         }
 
         return userMapper.mapToDto(userRepository.save(user));
+    }
+
+    public UserDTO getUserFromToken(String token) {
+        UUID id = jwtTokenProvider.extractIdFromClaims(token);
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User Not Found"));
+        return userMapper.mapToDto(user);
     }
 }

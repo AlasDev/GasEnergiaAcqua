@@ -20,7 +20,9 @@ public class ReadingService {
     private final ReadingMapper readingMapper;
     private final UtilityMeterRepository utilityMeterRepository;
 
-    public ReadingService(ReadingRepository readingRepository, ReadingMapper readingMapper, UtilityMeterRepository utilityMeterRepository) {
+    public ReadingService(ReadingRepository readingRepository,
+                          ReadingMapper readingMapper,
+                          UtilityMeterRepository utilityMeterRepository) {
         this.readingRepository = readingRepository;
         this.readingMapper = readingMapper;
         this.utilityMeterRepository = utilityMeterRepository;

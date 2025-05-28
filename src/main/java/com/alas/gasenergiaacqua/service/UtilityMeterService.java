@@ -1,5 +1,6 @@
 package com.alas.gasenergiaacqua.service;
 
+import com.alas.gasenergiaacqua.auth.JwtTokenProvider;
 import com.alas.gasenergiaacqua.dto.*;
 import com.alas.gasenergiaacqua.entity.UtilityMeter;
 import com.alas.gasenergiaacqua.exception.ElementAlreadyPresentException;
@@ -23,8 +24,12 @@ public class UtilityMeterService {
     private final ResourceTypeRepository resourceTypeRepository;
     private final UtilityMeterTypeRepository utilityMeterTypeRepository;
 
-
-    public UtilityMeterService(UtilityMeterRepository utilityMeterRepository, UtilityMeterMapper utilityMeterMapper, UserRepository userRepository, AddressRepository addressRepository, ResourceTypeRepository resourceTypeRepository, UtilityMeterTypeRepository utilityMeterTypeRepository) {
+    public UtilityMeterService(UtilityMeterRepository utilityMeterRepository,
+                               UtilityMeterMapper utilityMeterMapper,
+                               UserRepository userRepository,
+                               AddressRepository addressRepository,
+                               ResourceTypeRepository resourceTypeRepository,
+                               UtilityMeterTypeRepository utilityMeterTypeRepository) {
         this.utilityMeterRepository = utilityMeterRepository;
         this.utilityMeterMapper = utilityMeterMapper;
         this.userRepository = userRepository;
@@ -47,13 +52,13 @@ public class UtilityMeterService {
      * @param pageable pageable
      * @return a pageDTO containing a list of DTO
      */
-    public PageDTO<UtilityMeterSummaryDTO> searchBySpecification(Pageable pageable, UtilityMeterFilter params) {
+    public PageDTO<UtilityMeterDTO> searchBySpecification(Pageable pageable, UtilityMeterFilter params) {
         return utilityMeterMapper.mapToPageDTO(utilityMeterRepository.findAll(params.toSpecification(), pageable));
     }
 
     /**
      * Deletes a UtilityMeter with given uuid
-     * @param id uuid of the UtilityMeter which is going to be deleted
+     * @param id uuid of the UtilityMeter, which is going to be deleted
      * @return a ResponseMessage
      */
     public ResponseMessage deleteById(UUID id) {
