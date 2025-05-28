@@ -99,7 +99,7 @@ public class JwtTokenProvider {
     }
 
     /**
-     * Extracts email from token subject.
+     * Extracts email from a token subject.
      *
      * @param token token
      * @return email
@@ -115,17 +115,17 @@ public class JwtTokenProvider {
      * @return id
      */
     public UUID extractIdFromClaims(final String token) {
-        return extractClaim(token, claims -> claims.get("id", UUID.class));
+        return UUID.fromString(extractClaim(token, claims -> claims.get("id", String.class)));
     }
 
     /**
-     * Extracts user type
+     * Extracts a user type id
      *
      * @param token token
      * @return value of userType
      */
-    public String extractUserTypeFromClaims(final String token) {
-        return extractClaim(token, claims -> claims.get("userType", String.class));
+    public Integer extractUserTypeFromClaims(final String token) {
+        return extractClaim(token, claims -> claims.get("userType", Integer.class));
     }
 
     /**
@@ -142,7 +142,7 @@ public class JwtTokenProvider {
     }
 
     /**
-     * Extracts all claims from token
+     * Extracts all claims from a token
      *
      * @param token token
      * @return all the claims from the token
