@@ -22,7 +22,11 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordUtil passwordUtil;
 
-    public AuthService(UserRepository userRepository, UserMapper userMapper, UserService userService, JwtTokenProvider jwtTokenProvider, PasswordUtil passwordUtil) {
+    public AuthService(UserRepository userRepository,
+                       UserMapper userMapper,
+                       UserService userService,
+                       JwtTokenProvider jwtTokenProvider,
+                       PasswordUtil passwordUtil) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userService = userService;
@@ -31,14 +35,14 @@ public class AuthService {
     }
 
     /**
-     * user is obtained using just the email instead of both "email and password" because Bcrypt doesn't let you hash
-     * and obtain the same hashed result without using the same "salt",
+     * User is obtained using just the email instead of both "email and password" because Bcrypt doesn't let you hash
+     * and get the same hashed result without using the same "salt",
      * if hashing a password and letting the repository try to match it with the hashed password that is already saved
-     * in the db they will not match. You need to obtain the user and use {@code PasswordUtil.match()} to properly
+     * in the database, they will not match. You need to obtain the user and use {@code PasswordUtil.match()} to properly
      * check if they match or not.
      *
      * @param credentials user credentials
-     * @return a new token inside a json
+     * @return a new token inside a JSON
      */
     public ResponseMessage login(UserLoginDTO credentials) {
         String email = credentials.getEmail();

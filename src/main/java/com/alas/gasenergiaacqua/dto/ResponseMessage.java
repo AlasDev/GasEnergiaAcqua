@@ -15,4 +15,3 @@ public class ResponseMessage {
     Instant timestamp;
     String message;
 }
-

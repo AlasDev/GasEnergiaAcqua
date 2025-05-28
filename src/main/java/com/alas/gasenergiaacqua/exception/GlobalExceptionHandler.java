@@ -31,8 +31,8 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Exception handler for MethodArgumentNotValidException.
-     * @param ex MethodArgumentNotValidException
+     * Exception handler for ElementAlreadyPresentException.
+     * @param ex ElementAlreadyPresentException
      * @return ResponseEntity with error body and appropriate HTTP status
      */
     @ExceptionHandler(ElementAlreadyPresentException.class)
