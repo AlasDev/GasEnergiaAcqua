@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Filter params to only return the values that satisfy the criteria. If a filter param is empty it will not be considered
+ * Filter params to only return the values that satisfy the criteria.
+ * If a filter param is empty, it will not be considered
  */
 @Data
 public class AddressFilter {
@@ -37,7 +38,7 @@ public class AddressFilter {
             if (id == null) {
                 return null;
             }
-            return criteriaBuilder.equal(root.get("uuid"), id.toString());
+            return criteriaBuilder.equal(root.get("id"), id.toString());
         };
     }
 

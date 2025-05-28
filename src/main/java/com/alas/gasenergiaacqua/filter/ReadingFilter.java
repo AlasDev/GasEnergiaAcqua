@@ -7,6 +7,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Filter params to only return the values that satisfy the criteria.
+ * If a filter param is empty, it will not be considered
+ */
 public class ReadingFilter {
     UUID id;
     BigDecimal valueRecorded;
@@ -33,7 +37,7 @@ public class ReadingFilter {
             if (id == null) {
                 return null;
             }
-            return criteriaBuilder.equal(root.get("uuid"), id.toString());
+            return criteriaBuilder.equal(root.get("id"), id.toString());
         };
     }
 

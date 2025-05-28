@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Filter params to only return the values that satisfy the criteria. If a filter param is empty it will not be considered
+ * Filter params to only return the values that satisfy the criteria.
+ * If a filter param is empty, it will not be considered
  */
 @Data
 public class UtilityMeterFilter {
-    private UUID id;
     private UUID userId;
     private UUID addressId;
 
@@ -26,25 +26,41 @@ public class UtilityMeterFilter {
 
     private LocalDateTime fromCreatedAt;
     private LocalDateTime toCreatedAt;
+    private LocalDateTime fromInstallationDateAt;
+    private LocalDateTime toInstallationDateAt;
     private LocalDateTime fromUpdatedAt;
     private LocalDateTime toUpdatedAt;
 
     public Specification<UtilityMeter> toSpecification() {
         return Specification.<UtilityMeter>where(null)
-                .and(equalUuidSpecification(id))
+                .and(equalUserIdSpecification(userId))
+                .and(equalAddressIdSpecification(addressId))
+
                 .and(greaterThanOrEqualToUpdatedAtSpecification(fromUpdatedAt))
                 .and(lessThanUpdatedAtSpecification(toUpdatedAt))
+                .and(greaterThanOrEqualToinstallationDateAtSpecification(fromInstallationDateAt))
+                .and(lessThantoInstallationDateAtSpecification(toInstallationDateAt))
                 .and(greaterThanOrEqualToCreatedAtSpecification(fromCreatedAt))
                 .and(lessThanCreatedAtSpecification(toCreatedAt));
     }
 
-    //uuid
-    private Specification<UtilityMeter> equalUuidSpecification(UUID id) {
+    //user uuid
+    private Specification<UtilityMeter> equalUserIdSpecification(UUID id) {
         return (root, query, criteriaBuilder) -> {
             if (id == null) {
                 return null;
             }
-            return criteriaBuilder.equal(root.get("uuid"), id.toString());
+            return criteriaBuilder.equal(root.get("id"), id);
+        };
+    }
+
+    //address uuid
+    private Specification<UtilityMeter> equalAddressIdSpecification(UUID id) {
+        return (root, query, criteriaBuilder) -> {
+            if (id == null) {
+                return null;
+            }
+            return criteriaBuilder.equal(root.get("id"), id);
         };
     }
 
@@ -65,6 +81,26 @@ public class UtilityMeterFilter {
                 return null;
             }
             return criteriaBuilder.lessThan(root.get("updatedAt"), localDateTime);
+        };
+    }
+
+    //from installationDateAt
+    private Specification<UtilityMeter> greaterThanOrEqualToinstallationDateAtSpecification(LocalDateTime localDateTime) {
+        return (root, query, criteriaBuilder) -> {
+            if (localDateTime == null) {
+                return null;
+            }
+            return criteriaBuilder.greaterThanOrEqualTo(root.get("installationDate"), localDateTime);
+        };
+    }
+
+    //to toInstallationDateAt
+    private Specification<UtilityMeter> lessThantoInstallationDateAtSpecification(LocalDateTime localDateTime) {
+        return (root, query, criteriaBuilder) -> {
+            if (localDateTime == null) {
+                return null;
+            }
+            return criteriaBuilder.lessThan(root.get("installationDate"), localDateTime);
         };
     }
 

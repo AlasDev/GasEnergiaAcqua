@@ -124,7 +124,7 @@ public class AccessFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 break;
             case 1: //normal user
-                System.out.println("NORMAL");
+                System.out.println("NORMAL called method: " + method + " url: " + url);
                 switch (method) {
                     case "GET":
                         System.out.println("GET: " + url);
