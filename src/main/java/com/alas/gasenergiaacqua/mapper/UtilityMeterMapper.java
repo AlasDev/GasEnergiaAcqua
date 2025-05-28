@@ -46,7 +46,7 @@ public interface UtilityMeterMapper {
 
     List<UtilityMeter> mapToEntities(List<UtilityMeterDTO> dtos);
 
-    PageDTO<UtilityMeterSummaryDTO> mapToPageDTO(Page<UtilityMeter> page);
+    PageDTO<UtilityMeterDTO> mapToPageDTO(Page<UtilityMeter> page);
 
     @Named("toReadingsIds")
     default List<UUID> toReadingsIds(List<Reading> entities) {
