@@ -57,7 +57,7 @@ public class AccessFilter extends OncePerRequestFilter {
      *
      * @param request            Request received from the user
      * @param response           Response returned to the user
-     * @param filterChain Object provided by the servlet container to the developer giving a view into the invocation chain of a filtered request for a resource. Filters use the FilterChain to invoke the next filter in the chain,
+     * @param filterChain Object provided by the servlet container to the developer giving a view into the invocation chain of a filtered request for a resource. Filters use the FilterChain to invoke the next filter in the chain.
      * @throws ServletException  Possible exception
      * @throws IOException       Possible exception
      */
@@ -68,20 +68,20 @@ public class AccessFilter extends OncePerRequestFilter {
         String url = request.getRequestURI();
         String method = request.getMethod();
 
-        if (!url.contains("/api")) return; //if url doesn't have '/api' in it, it will be ignored
+        if (!url.contains("/api")) return; //if the url doesn't have '/api' in it, it will be ignored
 
         /*
-         * Used by front-ent to make sure that backend is working (operation of pre-flight)
-         * A preflight request is an automatic browser initiated OPTIONS request that takes
+         * Used by front-ent to make sure that backend is working (operation of pre-flight).
+         * A preflight request is an automatic browser-initiated OPTIONS request that takes
          * occurs before certain cors-origin requests to ensure that backend/server is working,
-         * so that server accepts the upcoming request method, header and credentials.
+         * so that the server accepts the upcoming request method, header and credentials.
          */
         if (method.equalsIgnoreCase("OPTIONS")) {
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
-        //won't ask for a token to login or register
+        //won't ask for a token to log in or register
         if (method.equalsIgnoreCase("POST") && url.startsWith(AUTH_ENDPOINT) &&
                 url.endsWith("/login") ||
                 url.endsWith("/register")) {
