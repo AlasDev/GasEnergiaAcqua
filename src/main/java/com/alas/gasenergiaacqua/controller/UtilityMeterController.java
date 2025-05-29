@@ -1,5 +1,6 @@
 package com.alas.gasenergiaacqua.controller;
 
+import com.alas.gasenergiaacqua.auth.JwtTokenProvider;
 import com.alas.gasenergiaacqua.dto.*;
 import com.alas.gasenergiaacqua.filter.UtilityMeterFilter;
 import com.alas.gasenergiaacqua.service.UtilityMeterService;
@@ -14,9 +15,11 @@ import java.util.UUID;
 public class UtilityMeterController {
 
     private final UtilityMeterService utilityMeterService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public UtilityMeterController(UtilityMeterService utilityMeterService) {
+    public UtilityMeterController(UtilityMeterService utilityMeterService, JwtTokenProvider jwtTokenProvider) {
         this.utilityMeterService = utilityMeterService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @GetMapping("/{id}")
@@ -25,7 +28,7 @@ public class UtilityMeterController {
     }
 
     @GetMapping("/filter")
-    public PageDTO<UtilityMeterSummaryDTO> getFiltered(Pageable pageable, UtilityMeterFilter filter) {
+    public PageDTO<UtilityMeterDTO> getFiltered(Pageable pageable, UtilityMeterFilter filter) {
         return utilityMeterService.searchBySpecification(pageable, filter);
     }
 
@@ -42,5 +45,13 @@ public class UtilityMeterController {
     @PutMapping("/update")
     public UtilityMeterDTO update(@Validated @RequestBody UtilityMeterUpdateDTO DTO) {
         return utilityMeterService.updateUtilityMeter(DTO);
+    }
+
+    @GetMapping("/my-utility-meters")
+    public PageDTO<UtilityMeterDTO> get(@RequestHeader("Authorization") String token,
+                                               Pageable pageable,
+                                               UtilityMeterFilter filter) {
+        filter.setUserId(jwtTokenProvider.extractIdFromClaims(token));
+        return utilityMeterService.searchBySpecification(pageable, filter);
     }
 }

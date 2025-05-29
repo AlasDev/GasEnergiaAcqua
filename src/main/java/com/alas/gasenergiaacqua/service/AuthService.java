@@ -59,7 +59,6 @@ public class AuthService {
                 .message("Successfully logged in!\nUserType: " + userFound.getUserType())
                 .token(token)
                 .build();
-
     }
 
     /**

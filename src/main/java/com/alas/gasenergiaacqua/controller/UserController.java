@@ -43,4 +43,9 @@ public class UserController {
     public UserDTO update(@Validated @RequestBody UserUpdateDTO DTO) {
         return userService.updateUser(DTO);
     }
+
+    @GetMapping("/profile")
+    public UserDTO getProfile(@RequestHeader("Authorization") String token) {
+        return userService.getUserFromToken(token);
+    }
 }
