@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/utilitymeter")
+@RequestMapping("/api/utilityMeter")
 public class UtilityMeterController {
 
     private final UtilityMeterService utilityMeterService;
