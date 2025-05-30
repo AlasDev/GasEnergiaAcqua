@@ -1,3 +1,5 @@
+#file to tell docker how to create a container
+#run with "docker-compose up -d" in cmd from the same folder path as this file
 services:
   pg-service:
     restart: unless-stopped

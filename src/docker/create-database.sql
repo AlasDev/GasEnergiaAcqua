@@ -12,22 +12,22 @@ CREATE TABLE resource_types (
                                 type_name VARCHAR(255) NOT NULL UNIQUE
 );
 
-CREATE TABLE utility_meter_type (
+CREATE TABLE utility_meter_types (
                                id SERIAL PRIMARY KEY,
-                               method_name VARCHAR(255) NOT NULL UNIQUE
+                              type_name VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- Inserimento dei valori predefiniti nelle tabelle di lookup
 INSERT INTO user_types (type_name) VALUES ('NORMAL'), ('ADMIN');
 INSERT INTO resource_types (type_name) VALUES ('WATER'), ('GAS'), ('ELECTRICITY');
-INSERT INTO utility_meter_type (method_name) VALUES ('MANUAL'), ('AUTOMATIC');
+INSERT INTO utility_meter_types (type_name) VALUES ('MANUAL'), ('AUTOMATIC');
 
 -- Tabella Utenti
 CREATE TABLE users (
                        id UUID DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
                        name VARCHAR(255) NOT NULL,
                        surname VARCHAR(255) NOT NULL,
-                       email VARCHAR(255) NOT NULL UNIQUE,
+                       email VARCHAR(255) NOT NULL UNIQUE CHECK (email LIKE '%@%.%'), -- check if email contains has the right pattern
                        password VARCHAR(255) NOT NULL,
                        user_type_id INTEGER NOT NULL REFERENCES user_types(id) DEFAULT 1, --1 = 'NORMAL'
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -49,7 +49,7 @@ CREATE TABLE utility_meters (
                                 user_id UUID NOT NULL, -- Chiave esterna verso users
                                 address_id UUID,
                                 resource_type_id INTEGER NOT NULL REFERENCES resource_types(id),
-                                utility_meter_type_id INTEGER NOT NULL REFERENCES utility_meter_type(id) DEFAULT 1, -- 1 è 'MANUAL'
+                                utility_meter_type_id INTEGER NOT NULL REFERENCES utility_meter_types(id) DEFAULT 1, -- 1 è 'MANUAL'
                                 service_point_identifier VARCHAR(255) UNIQUE, -- Campo generico per PDR/POD/Codice Acqua
                                 serial_number VARCHAR(255),
                                 meter_name VARCHAR(255), -- Un nome assegnato dall'utente per identificarlo più facilmente
