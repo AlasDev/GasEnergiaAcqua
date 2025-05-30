@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UtilityMeterTypeDTO {
     private Integer id;
-    private String methodName;
+    private String typeName;
 }

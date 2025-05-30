@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "utility_meter_type")
+@Table(name = "utility_meter_types")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +19,6 @@ public class UtilityMeterType {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "method_name", nullable = false, unique = true)
-    private String methodName;
+    @Column(name = "type_name", nullable = false, unique = true)
+    private String typeName;
 }
