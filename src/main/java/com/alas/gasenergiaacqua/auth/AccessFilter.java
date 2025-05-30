@@ -157,7 +157,6 @@ public class AccessFilter extends OncePerRequestFilter {
                                 response);
                         break;
                 }
-                filterChain.doFilter(request, response);
                 break;
             default:
                 handleException(
