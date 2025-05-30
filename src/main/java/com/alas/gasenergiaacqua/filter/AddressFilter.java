@@ -5,7 +5,6 @@ import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * Filter params to only return the values that satisfy the criteria.
@@ -13,7 +12,6 @@ import java.util.UUID;
  */
 @Data
 public class AddressFilter {
-    UUID id;
     String streetAddress;
     String city;
     String postalCode;
@@ -23,23 +21,12 @@ public class AddressFilter {
 
     public Specification<Address> toSpecification() {
         return Specification.<Address>where(null)
-                .and(equalUuidSpecification(id))
                 .and(likeStreetAddressSpecification(streetAddress))
                 .and(likeCitySpecification(city))
                 .and(likePostalCodeSpecification(postalCode))
                 .and(likeCountrySpecification(country))
                 .and(greaterThanOrEqualToCreatedAtSpecification(fromCreatedAt))
                 .and(lessThanCreatedAtSpecification(toCreatedAt));
-    }
-
-    //uuid
-    private Specification<Address> equalUuidSpecification(UUID id) {
-        return (root, query, criteriaBuilder) -> {
-            if (id == null) {
-                return null;
-            }
-            return criteriaBuilder.equal(root.get("id"), id.toString());
-        };
     }
 
     //streetAddress

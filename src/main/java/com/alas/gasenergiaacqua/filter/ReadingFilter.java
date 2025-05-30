@@ -5,14 +5,12 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * Filter params to only return the values that satisfy the criteria.
  * If a filter param is empty, it will not be considered
  */
 public class ReadingFilter {
-    UUID id;
     BigDecimal valueRecorded;
     LocalDateTime fromReadingTimestamp;
     LocalDateTime toReadingTimestamp;
@@ -22,23 +20,12 @@ public class ReadingFilter {
 
     public Specification<Reading> toSpecification() {
         return Specification.<Reading>where(null)
-                .and(equalUuidSpecification(id))
                 .and(equalValueRecordedSpecification(valueRecorded))
                 .and(greaterThanOrEqualToReadingTimestampSpecification(fromReadingTimestamp))
                 .and(lessThanReadingTimestampSpecification(toReadingTimestamp))
                 .and(likeNotesSpecification(notes))
                 .and(greaterThanOrEqualToCreatedAtSpecification(fromCreatedAt))
                 .and(lessThanCreatedAtSpecification(toCreatedAt));
-    }
-
-    //uuid
-    private Specification<Reading> equalUuidSpecification(UUID id) {
-        return (root, query, criteriaBuilder) -> {
-            if (id == null) {
-                return null;
-            }
-            return criteriaBuilder.equal(root.get("id"), id.toString());
-        };
     }
 
     //valueRecorded

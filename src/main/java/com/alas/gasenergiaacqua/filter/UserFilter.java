@@ -6,7 +6,6 @@ import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * Filter params to only return the values that satisfy the criteria.
@@ -14,7 +13,6 @@ import java.util.UUID;
  */
 @Data
 public class UserFilter {
-    UUID id;
     String name;
     String surname;
     String email;
@@ -24,23 +22,12 @@ public class UserFilter {
 
     public Specification<User> toSpecification() {
         return Specification.<User>where(null)
-                .and(equalUuidSpecification(id))
                 .and(likeNameSpecification(name))
                 .and(likeSurnameSpecification(surname))
                 .and(likeEmailSpecification(email))
                 .and(equalUserTypeSpecification(userType))
                 .and(greaterThanOrEqualToCreatedAtSpecification(fromCreatedAt))
                 .and(lessThanCreatedAtSpecification(toCreatedAt));
-    }
-
-    //uuid
-    private Specification<User> equalUuidSpecification(UUID id) {
-        return (root, query, criteriaBuilder) -> {
-            if (id == null) {
-                return null;
-            }
-            return criteriaBuilder.equal(root.get("id"), id.toString());
-        };
     }
 
     //name
