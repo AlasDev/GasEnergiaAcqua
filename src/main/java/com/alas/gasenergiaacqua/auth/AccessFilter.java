@@ -89,6 +89,13 @@ public class AccessFilter extends OncePerRequestFilter {
             return;
         }
 
+        //won't ask for a token to manually request a check on the token
+        if (method.equalsIgnoreCase("GET") && url.startsWith(AUTH_ENDPOINT) &&
+                url.endsWith("/tokenValidation")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             final String token = request.getHeader("Authorization");
             if (!url.startsWith(AUTH_ENDPOINT)) {
