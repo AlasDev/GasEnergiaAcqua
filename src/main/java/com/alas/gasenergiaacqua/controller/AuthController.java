@@ -4,9 +4,7 @@ import com.alas.gasenergiaacqua.auth.JwtTokenProvider;
 import com.alas.gasenergiaacqua.dto.ResponseMessage;
 import com.alas.gasenergiaacqua.dto.UserLoginDTO;
 import com.alas.gasenergiaacqua.dto.UserRegisterDTO;
-import com.alas.gasenergiaacqua.exception.AuthenticationException;
 import com.alas.gasenergiaacqua.service.AuthService;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,8 +41,10 @@ public class AuthController {
     @GetMapping("/tokenValidation")
     public boolean validateToken(@RequestHeader("Authorization") String jwtToken) {
         if (jwtTokenProvider.isTokenEmpty(jwtToken) || !jwtTokenProvider.isValid(jwtToken) || jwtTokenProvider.isTokenExpired(jwtToken)) {
+            System.out.println("Token is not valid or is expired");
             return false;
         }
+        System.out.println("Token is still valid");
         return true;
     }
 }
