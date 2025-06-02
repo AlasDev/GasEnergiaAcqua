@@ -36,12 +36,20 @@ public class UtilityMeterFilter {
                 .and(equalUserIdSpecification(userId))
                 .and(equalAddressIdSpecification(addressId))
 
-                .and(greaterThanOrEqualToUpdatedAtSpecification(fromUpdatedAt))
-                .and(lessThanUpdatedAtSpecification(toUpdatedAt))
+                .and(equalResourceTypeIdSpecification(resourceTypeId))
+                .and(equalUtilityMeterTypeIdSpecification(utilityMeterTypeId))
+
+                .and(likeServicePointIdentifierSpecification(servicePointIdentifier))
+                .and(likeSerialNumberSpecification(serialNumber))
+                .and(likeMeterNameSpecification(meterName))
+                .and(equalIsActiveSpecification(isActive))
+
+                .and(greaterThanOrEqualToCreatedAtSpecification(fromCreatedAt))
+                .and(lessThanCreatedAtSpecification(toCreatedAt))
                 .and(greaterThanOrEqualToinstallationDateAtSpecification(fromInstallationDateAt))
                 .and(lessThantoInstallationDateAtSpecification(toInstallationDateAt))
-                .and(greaterThanOrEqualToCreatedAtSpecification(fromCreatedAt))
-                .and(lessThanCreatedAtSpecification(toCreatedAt));
+                .and(greaterThanOrEqualToUpdatedAtSpecification(fromUpdatedAt))
+                .and(lessThanUpdatedAtSpecification(toUpdatedAt));
     }
 
     //user uuid
@@ -50,7 +58,7 @@ public class UtilityMeterFilter {
             if (id == null) {
                 return null;
             }
-            return criteriaBuilder.equal(root.get("id"), id);
+            return criteriaBuilder.equal(root.get("userId"), id);
         };
     }
 
@@ -60,7 +68,67 @@ public class UtilityMeterFilter {
             if (id == null) {
                 return null;
             }
-            return criteriaBuilder.equal(root.get("id"), id);
+            return criteriaBuilder.equal(root.get("addressId"), id);
+        };
+    }
+
+    //resource type id
+    private Specification<UtilityMeter> equalResourceTypeIdSpecification(Integer id) {
+        return (root, query, criteriaBuilder) -> {
+            if (id == null) {
+                return null;
+            }
+            return criteriaBuilder.equal(root.get("resourceTypeId"), id);
+        };
+    }
+
+    //utility meter type id
+    private Specification<UtilityMeter> equalUtilityMeterTypeIdSpecification(Integer id) {
+        return (root, query, criteriaBuilder) -> {
+            if (id == null) {
+                return null;
+            }
+            return criteriaBuilder.equal(root.get("utilityMeterTypeId"), id);
+        };
+    }
+
+    //service point identifier
+    private Specification<UtilityMeter> likeServicePointIdentifierSpecification(String string) {
+        return (root, query, criteriaBuilder) -> {
+            if (string == null || string.isBlank()) {
+                return null;
+            }
+            return criteriaBuilder.like(root.get("servicePointIdentifier"), string);
+        };
+    }
+
+    //serial number
+    private Specification<UtilityMeter> likeSerialNumberSpecification(String string) {
+        return (root, query, criteriaBuilder) -> {
+            if (string == null || string.isBlank()) {
+                return null;
+            }
+            return criteriaBuilder.like(root.get("serialNumber"), string);
+        };
+    }
+
+    //meter name
+    private Specification<UtilityMeter> likeMeterNameSpecification(String string) {
+        return (root, query, criteriaBuilder) -> {
+            if (string == null || string.isBlank()) {
+                return null;
+            }
+            return criteriaBuilder.like(root.get("meterName"), string);
+        };
+    }
+
+    //status
+    private Specification<UtilityMeter> equalIsActiveSpecification(Boolean bool) {
+        return (root, query, criteriaBuilder) -> {
+            if (bool == null) {
+                return null;
+            }
+            return criteriaBuilder.equal(root.get("isActive"), bool);
         };
     }
 
